@@ -25,6 +25,7 @@ public class Libro {
         this.urlImagen = urlImagen;	this.urlAudio = urlAudio;
         this.genero = genero; this.novedad = novedad; this.leido = leido;
     }
+    public final static Libro LIBRO_EMPTY = new Libro("", "anónimo", "http://www.dcomg.upv.es/~jtomas/android/audiolibros/sin_portada.jpg", "", G_TODOS, true, false);
 
     public static List<Libro> ejemploLibros() {
         final String SERVIDOR = "http://mmoviles.upv.es/audiolibros/";
