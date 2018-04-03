@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+    private LibroStorage libroStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(
                 R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        
+
+        libroStorage = new LibroStorage(this);
     }
 
     @Override
@@ -154,11 +156,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void irUltimoVisitado() {
-        SharedPreferences pref = getSharedPreferences(
-                "com.example.audiolibros_internal", MODE_PRIVATE);
-        int id = pref.getInt("ultimo", -1);
-        if (libro) {
-            mostrarDetalle(id);
+        if (libroStorage.hasLastBook()) {
+            mostrarDetalle(libroStorage.getLastBook());
         } else {
             Toast.makeText(this,"Sin última vista",Toast.LENGTH_LONG).show();
         }
