@@ -23,12 +23,17 @@ public class AdaptadorLibros extends
     private Context contexto;
     private View.OnClickListener onClickListener;
     private View.OnLongClickListener onLongClickListener;
+    private ClickAction clickAction = new EmptyClickAction();
 
     public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
         inflador = (LayoutInflater) contexto
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listaLibros = listaLibros;
         this.contexto = contexto;
+    }
+
+    public void setClickAction(ClickAction clickAction) {
+        this.clickAction = clickAction;
     }
 
     //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -49,17 +54,23 @@ public class AdaptadorLibros extends
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflamos la vista desde el xml
         View v = inflador.inflate(R.layout.elemento_selector, null);
-        v.setOnClickListener(onClickListener);
+//        v.setOnClickListener(onClickListener);
         v.setOnLongClickListener(onLongClickListener);
         return new ViewHolder(v);
     }
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int posicion) {
+    public void onBindViewHolder(final ViewHolder holder, final int posicion) {
         Libro libro = listaLibros.get(posicion);
         //holder.portada.setImageResource(libro.recursoImagen);
         holder.titulo.setText(libro.titulo);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAction.execute(posicion);
+            }
+        });
         Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
         aplicacion.getLectorImagenes().get(libro.urlImagen,
                 new ImageLoader.ImageListener() {

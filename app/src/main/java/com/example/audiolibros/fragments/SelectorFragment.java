@@ -25,6 +25,7 @@ import com.example.audiolibros.AdaptadorLibrosFiltro;
 import com.example.audiolibros.Aplicacion;
 import com.example.audiolibros.Libro;
 import com.example.audiolibros.MainActivity;
+import com.example.audiolibros.OpenDetailClickAction;
 import com.example.audiolibros.R;
 import com.example.audiolibros.SearchObservable;
 
@@ -52,14 +53,15 @@ public class SelectorFragment extends Fragment {
                 R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(actividad,2));
         recyclerView.setAdapter(adaptador);
-        adaptador.setOnItemClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) actividad).mostrarDetalle(
-                        (int) adaptador.getItemId(
-                        recyclerView.getChildAdapterPosition(v)));
-            }
-        });
+//        adaptador.setOnItemClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((MainActivity) actividad).mostrarDetalle(
+//                        (int) adaptador.getItemId(
+//                        recyclerView.getChildAdapterPosition(v)));
+//            }
+//        });
+        adaptador.setClickAction(new OpenDetailClickAction((MainActivity) getActivity()));
 
         adaptador.setOnItemLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(final View v) {
