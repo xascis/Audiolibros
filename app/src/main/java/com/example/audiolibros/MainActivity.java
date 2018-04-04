@@ -2,6 +2,7 @@ package com.example.audiolibros;
 
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -15,16 +16,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.audiolibros.fragments.DetalleFragment;
 import com.example.audiolibros.fragments.SelectorFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdaptadorLibrosFiltro adaptador;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         //Fragments
         if ((findViewById(R.id.contenedor_pequeno) != null) &&
                 (getFragmentManager().findFragmentById(
-                        R.id.contenedor_pequeno) == null)){
+                        R.id.contenedor_pequeno) == null)) {
             SelectorFragment primerFragment = new SelectorFragment();
             getFragmentManager().beginTransaction()
                     .add(R.id.contenedor_pequeno, primerFragment).commit();
@@ -63,7 +64,8 @@ public class MainActivity extends AppCompatActivity
         tabs.addTab(tabs.newTab().setText("Leidos"));
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0: //Todos
                         adaptador.setNovedad(false);
@@ -80,8 +82,14 @@ public class MainActivity extends AppCompatActivity
                 }
                 adaptador.notifyDataSetChanged();
             }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
         //Botón Flotante
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -95,11 +103,12 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(
                 R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this,
-                drawer, toolbar, R.string.drawer_open, R.string. drawer_close);
+                drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
@@ -117,7 +126,8 @@ public class MainActivity extends AppCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_preferencias) {
             Toast.makeText(this, "Preferencias", Toast.LENGTH_LONG).show();
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         if (libroStorage.hasLastBook()) {
             mostrarDetalle(libroStorage.getLastBook());
         } else {
-            Toast.makeText(this,"Sin última vista",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -207,6 +217,14 @@ public class MainActivity extends AppCompatActivity
             tabs.setVisibility(View.GONE);
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
+    }
+
+    public void compartirLibro(Libro libro) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, libro.titulo);
+        i.putExtra(Intent.EXTRA_TEXT, libro.urlAudio);
+        startActivity(Intent.createChooser(i, "Compartir"));
     }
 
 }

@@ -24,16 +24,13 @@ public class AdaptadorLibros extends
     private View.OnClickListener onClickListener;
     private View.OnLongClickListener onLongClickListener;
     private ClickAction clickAction = new EmptyClickAction();
+    private LongClickAction longClickAction = new EmptyLongClickAction();
 
     public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
         inflador = (LayoutInflater) contexto
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listaLibros = listaLibros;
         this.contexto = contexto;
-    }
-
-    public void setClickAction(ClickAction clickAction) {
-        this.clickAction = clickAction;
     }
 
     //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -55,7 +52,7 @@ public class AdaptadorLibros extends
         // Inflamos la vista desde el xml
         View v = inflador.inflate(R.layout.elemento_selector, null);
 //        v.setOnClickListener(onClickListener);
-        v.setOnLongClickListener(onLongClickListener);
+//        v.setOnLongClickListener(onLongClickListener);
         return new ViewHolder(v);
     }
 
@@ -69,6 +66,13 @@ public class AdaptadorLibros extends
             @Override
             public void onClick(View v) {
                 clickAction.execute(posicion);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                longClickAction.execute(posicion);
+                return true;
             }
         });
         Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
@@ -108,6 +112,13 @@ public class AdaptadorLibros extends
     public void setOnItemLongClickListener(View.OnLongClickListener
                                                onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
+    }
+    public void setClickAction(ClickAction clickAction) {
+        this.clickAction = clickAction;
+    }
+
+    public void setLongClickAction(LongClickAction longClickAction) {
+        this.longClickAction = longClickAction;
     }
 
 }
