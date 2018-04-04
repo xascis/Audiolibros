@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private LibroStorage libroStorage;
+    private LibroStorage libroSharedPreferenceStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                 R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        libroStorage = new LibroStorage(this);
+        libroSharedPreferenceStorage = new LibroSharedPreferenceStorage(this);
     }
 
     @Override
@@ -156,8 +155,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void irUltimoVisitado() {
-        if (libroStorage.hasLastBook()) {
-            mostrarDetalle(libroStorage.getLastBook());
+        if (libroSharedPreferenceStorage.hasLastBook()) {
+            mostrarDetalle(libroSharedPreferenceStorage.getLastBook());
         } else {
             Toast.makeText(this,"Sin última vista",Toast.LENGTH_LONG).show();
         }
