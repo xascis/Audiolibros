@@ -26,12 +26,14 @@ public class AdaptadorLibros extends
     private ClickAction clickAction = new EmptyClickAction();
     private LongClickAction longClickAction = new EmptyLongClickAction();
     LibrosSingleton librosSingleton;
+    VolleySingleton volleySingleton;
 
     public AdaptadorLibros(Context contexto) {
         inflador = (LayoutInflater) contexto
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.contexto = contexto;
         librosSingleton = LibrosSingleton.getInstance(contexto);
+        volleySingleton = VolleySingleton.getInstance(contexto);
     }
 
     //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -76,8 +78,9 @@ public class AdaptadorLibros extends
                 return true;
             }
         });
-        Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
-        aplicacion.getLectorImagenes().get(libro.urlImagen,
+//        Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
+//        aplicacion.getLectorImagenes().get(libro.urlImagen,
+        volleySingleton.getLectorImagenes().get(libro.urlImagen,
                 new ImageLoader.ImageListener() {
                     @Override public void onResponse(ImageLoader.ImageContainer
                                                              response, boolean isImmediate) {

@@ -10,16 +10,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.audiolibros.Aplicacion;
 import com.example.audiolibros.Libro;
 import com.example.audiolibros.LibrosSingleton;
 import com.example.audiolibros.MainActivity;
 import com.example.audiolibros.R;
+import com.example.audiolibros.VolleySingleton;
 
 import java.io.IOException;
 
@@ -30,11 +29,14 @@ public class DetalleFragment extends Fragment implements
     MediaPlayer mediaPlayer;
     MediaController mediaController;
     LibrosSingleton librosSingleton;
+    VolleySingleton volleySingleton;
     private Activity activity;
 
-    @Override public View onCreateView(LayoutInflater inflador, ViewGroup
+    @Override
+    public View onCreateView(LayoutInflater inflador, ViewGroup
             contenedor, Bundle savedInstanceState) {
         librosSingleton = LibrosSingleton.getInstance(this.activity);
+        volleySingleton = VolleySingleton.getInstance(this.activity);
         View vista = inflador.inflate(R.layout.fragment_detalle,
                 contenedor, false);
         Bundle args = getArguments();
@@ -47,10 +49,11 @@ public class DetalleFragment extends Fragment implements
         return vista;
     }
 
-    @Override public void onResume(){
+    @Override
+    public void onResume() {
         DetalleFragment detalleFragment = (DetalleFragment)
                 getFragmentManager().findFragmentById(R.id.detalle_fragment);
-        if (detalleFragment == null ) {
+        if (detalleFragment == null) {
             ((MainActivity) getActivity()).mostrarElementos(false);
         }
         super.onResume();
@@ -62,12 +65,12 @@ public class DetalleFragment extends Fragment implements
         ((TextView) vista.findViewById(R.id.titulo)).setText(libro.titulo);
         ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
         //((ImageView) vista.findViewById(R.id.portada)).setImageResource(libro.recursoImagen);
-        Aplicacion aplicacion = (Aplicacion) getActivity().getApplication();
+//        Aplicacion aplicacion = (Aplicacion) getActivity().getApplication();
         ((NetworkImageView) vista.findViewById(R.id.portada)).setImageUrl(
-                libro.urlImagen,aplicacion.getLectorImagenes());
+                libro.urlImagen, volleySingleton.getLectorImagenes());
 
         vista.setOnTouchListener(this);
-        if (mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.release();
         }
         mediaPlayer = new MediaPlayer();
@@ -78,7 +81,7 @@ public class DetalleFragment extends Fragment implements
             mediaPlayer.setDataSource(getActivity(), audio);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
-            Log.e("Audiolibros", "ERROR: No se puede reproducir "+audio,e);
+            Log.e("Audiolibros", "ERROR: No se puede reproducir " + audio, e);
         }
     }
 
@@ -86,7 +89,8 @@ public class DetalleFragment extends Fragment implements
         ponInfoLibro(id, getView());
     }
 
-    @Override public void onPrepared(MediaPlayer mediaPlayer) {
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d("Audiolibros", "Entramos en onPrepared de MediaPlayer");
         mediaPlayer.start();
         mediaController.setMediaPlayer(this);
@@ -97,12 +101,14 @@ public class DetalleFragment extends Fragment implements
         mediaController.show();
     }
 
-    @Override public boolean onTouch(View vista, MotionEvent evento) {
+    @Override
+    public boolean onTouch(View vista, MotionEvent evento) {
         mediaController.show();
         return false;
     }
 
-    @Override public void onStop() {
+    @Override
+    public void onStop() {
         mediaController.hide();
         try {
             mediaPlayer.stop();
@@ -113,23 +119,28 @@ public class DetalleFragment extends Fragment implements
         super.onStop();
     }
 
-    @Override public boolean canPause() {
+    @Override
+    public boolean canPause() {
         return true;
     }
 
-    @Override public boolean canSeekBackward() {
+    @Override
+    public boolean canSeekBackward() {
         return true;
     }
 
-    @Override public boolean canSeekForward() {
+    @Override
+    public boolean canSeekForward() {
         return true;
     }
 
-    @Override public int getBufferPercentage() {
+    @Override
+    public int getBufferPercentage() {
         return 0;
     }
 
-    @Override public int getCurrentPosition() {
+    @Override
+    public int getCurrentPosition() {
         try {
             return mediaPlayer.getCurrentPosition();
         } catch (Exception e) {
@@ -137,27 +148,33 @@ public class DetalleFragment extends Fragment implements
         }
     }
 
-    @Override public int getDuration() {
+    @Override
+    public int getDuration() {
         return mediaPlayer.getDuration();
     }
 
-    @Override public boolean isPlaying() {
+    @Override
+    public boolean isPlaying() {
         return mediaPlayer.isPlaying();
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         mediaPlayer.pause();
     }
 
-    @Override public void seekTo(int pos) {
+    @Override
+    public void seekTo(int pos) {
         mediaPlayer.seekTo(pos);
     }
 
-    @Override public void start() {
+    @Override
+    public void start() {
         mediaPlayer.start();
     }
 
-    @Override public int getAudioSessionId() {
+    @Override
+    public int getAudioSessionId() {
         return 0;
     }
 }
