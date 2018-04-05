@@ -33,13 +33,17 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    LibroStorage libroStorage = LibroSharedPreferenceStorage.getInstance(this);
+    LibroStorage libroStorage;
+    LibrosSingleton librosSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
+        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
+        librosSingleton = LibrosSingleton.getInstance(this);
+//        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
+        adaptador = (AdaptadorLibrosFiltro) librosSingleton.getAdaptador();
         //Fragments
         if ((findViewById(R.id.contenedor_pequeno) != null) &&
                 (getFragmentManager().findFragmentById(

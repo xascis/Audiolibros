@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.audiolibros.AdaptadorLibrosFiltro;
 import com.example.audiolibros.Aplicacion;
+import com.example.audiolibros.LibrosSingleton;
 import com.example.audiolibros.MainActivity;
 import com.example.audiolibros.OpenDetailClickAction;
 import com.example.audiolibros.OpenMenuLongClickAction;
@@ -27,13 +28,16 @@ public class SelectorFragment extends Fragment {
     private RecyclerView recyclerView;
     private AdaptadorLibrosFiltro adaptador;
     //private Vector<Libro> vectorLibros;
+    LibrosSingleton librosSingleton;
 
     @Override
     public void onAttach(Activity actividad) {
         super.onAttach(actividad);
         this.actividad = actividad;
-        Aplicacion app = (Aplicacion) actividad.getApplication();
-        adaptador = app.getAdaptador();
+//        Aplicacion app = (Aplicacion) actividad.getApplication();
+        librosSingleton = LibrosSingleton.getInstance(actividad);
+//        adaptador = app.getAdaptador();
+        adaptador = (AdaptadorLibrosFiltro) librosSingleton.getAdaptador();
         //Vector<Libro> vectorLibros = app.getVectorLibros();
     }
 

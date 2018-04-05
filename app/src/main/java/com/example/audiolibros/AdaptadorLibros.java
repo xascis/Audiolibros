@@ -19,18 +19,19 @@ import java.util.Vector;
 public class AdaptadorLibros extends
         RecyclerView.Adapter<AdaptadorLibros.ViewHolder> {
     private LayoutInflater inflador;      //Crea Layouts a partir del XML
-    protected List<Libro> listaLibros; //Vector con libros a visualizar
+//    protected List<Libro> listaLibros; //Vector con libros a visualizar
     private Context contexto;
     private View.OnClickListener onClickListener;
     private View.OnLongClickListener onLongClickListener;
     private ClickAction clickAction = new EmptyClickAction();
     private LongClickAction longClickAction = new EmptyLongClickAction();
+    LibrosSingleton librosSingleton;
 
-    public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
+    public AdaptadorLibros(Context contexto) {
         inflador = (LayoutInflater) contexto
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.listaLibros = listaLibros;
         this.contexto = contexto;
+        librosSingleton = LibrosSingleton.getInstance(contexto);
     }
 
     //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -59,7 +60,7 @@ public class AdaptadorLibros extends
     // Usando como base el ViewHolder y lo personalizamos
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int posicion) {
-        Libro libro = listaLibros.get(posicion);
+        Libro libro = librosSingleton.getVectorLibros().get(posicion);
         //holder.portada.setImageResource(libro.recursoImagen);
         holder.titulo.setText(libro.titulo);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +104,7 @@ public class AdaptadorLibros extends
 
     // Indicamos el número de elementos de la lista
     @Override public int getItemCount() {
-        return listaLibros.size();
+        return librosSingleton.getVectorLibros().size();
     }
 
     public void setOnItemClickListener(View.OnClickListener onClickListener) {

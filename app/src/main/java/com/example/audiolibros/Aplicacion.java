@@ -20,8 +20,8 @@ public class Aplicacion extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        listaLibros = Libro.ejemploLibros();
-        adaptador = new AdaptadorLibrosFiltro(this, listaLibros);
+//        listaLibros = Libro.ejemploLibros();
+//        adaptador = new AdaptadorLibrosFiltro(this, listaLibros);
         colaPeticiones = Volley.newRequestQueue(this);
         lectorImagenes = new ImageLoader(colaPeticiones,
                 new ImageLoader.ImageCache() {
@@ -38,13 +38,13 @@ public class Aplicacion extends Application {
                 });
     }
 
-    public AdaptadorLibrosFiltro getAdaptador() {
-        return adaptador;
-    }
+//    public AdaptadorLibrosFiltro getAdaptador() {
+//        return adaptador;
+//    }
 
-    public List<Libro> getListaLibros() {
-        return listaLibros;
-    }
+//    public List<Libro> getListaLibros() {
+//        return listaLibros;
+//    }
 
     public static ImageLoader getLectorImagenes() {
         return lectorImagenes;

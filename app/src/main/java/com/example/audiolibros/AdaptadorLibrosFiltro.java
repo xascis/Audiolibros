@@ -2,6 +2,7 @@ package com.example.audiolibros;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -15,11 +16,13 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer{
     private String genero = "";           // Género seleccionado
     private boolean novedad = false;      // Si queremos ver solo novedades
     private boolean leido = false;        // Si queremos ver solo leidos
+    LibrosSingleton librosSingleton;
 
-    public AdaptadorLibrosFiltro(Context contexto,
-                                 List<Libro> listaLibros) {
-        super(contexto, listaLibros);
-        vectorSinFiltro = listaLibros;
+    public AdaptadorLibrosFiltro(Context contexto) {
+        super(contexto);
+        librosSingleton = LibrosSingleton.getInstance(contexto);
+//        vectorSinFiltro = listaLibros;
+        vectorSinFiltro = librosSingleton.getVectorLibros();
         recalculaFiltro();
     }
 
@@ -44,8 +47,9 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer{
     }
 
     public void recalculaFiltro() {
-        listaLibros = new Vector<>();
-        indiceFiltro = new Vector<>();
+//        listaLibros = new Vector<>();
+        librosSingleton.setVectorLibros(new ArrayList<Libro>());
+        indiceFiltro = new ArrayList<>();
         for (int i = 0; i < vectorSinFiltro.size(); i++) {
             Libro libro = vectorSinFiltro.get(i);
             if ((libro.titulo.toLowerCase().contains(busqueda) ||
@@ -53,7 +57,7 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer{
                     && (libro.genero.startsWith(genero))
                     && (!novedad || (novedad && libro.novedad))
                     && (!leido || (leido && libro.leido))) {
-                listaLibros.add(libro);
+                librosSingleton.getVectorLibros().add(libro);
                 indiceFiltro.add(i);
             }
         }

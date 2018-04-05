@@ -1,5 +1,6 @@
 package com.example.audiolibros.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.audiolibros.Aplicacion;
 import com.example.audiolibros.Libro;
+import com.example.audiolibros.LibrosSingleton;
 import com.example.audiolibros.MainActivity;
 import com.example.audiolibros.R;
 
@@ -27,9 +29,12 @@ public class DetalleFragment extends Fragment implements
     public static String ARG_ID_LIBRO = "id_libro";
     MediaPlayer mediaPlayer;
     MediaController mediaController;
+    LibrosSingleton librosSingleton;
+    private Activity activity;
 
     @Override public View onCreateView(LayoutInflater inflador, ViewGroup
             contenedor, Bundle savedInstanceState) {
+        librosSingleton = LibrosSingleton.getInstance(this.activity);
         View vista = inflador.inflate(R.layout.fragment_detalle,
                 contenedor, false);
         Bundle args = getArguments();
@@ -52,8 +57,8 @@ public class DetalleFragment extends Fragment implements
     }
 
     private void ponInfoLibro(int id, View vista) {
-        Libro libro = ((Aplicacion) getActivity().getApplication())
-                .getListaLibros().get(id);
+//        Libro libro = ((Aplicacion) getActivity().getApplication()).getListaLibros().get(id);
+        Libro libro = librosSingleton.getVectorLibros().get(id);
         ((TextView) vista.findViewById(R.id.titulo)).setText(libro.titulo);
         ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
         //((ImageView) vista.findViewById(R.id.portada)).setImageResource(libro.recursoImagen);

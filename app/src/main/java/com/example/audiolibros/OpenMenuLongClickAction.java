@@ -11,10 +11,12 @@ public class OpenMenuLongClickAction implements LongClickAction {
     private MainActivity actividad;
     private AdaptadorLibrosFiltro adaptador;
     private View v;
+    LibrosSingleton librosSingleton;
 
     public OpenMenuLongClickAction(MainActivity actividad, AdaptadorLibros adaptador, View v) {
         this.actividad = actividad;
-        this.adaptador = (AdaptadorLibrosFiltro) adaptador;
+        librosSingleton = LibrosSingleton.getInstance(actividad);
+        this.adaptador = (AdaptadorLibrosFiltro) librosSingleton.getAdaptador();
         this.v = v;
     }
 
