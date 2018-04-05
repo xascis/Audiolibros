@@ -24,7 +24,7 @@ import com.example.audiolibros.fragments.DetalleFragment;
 import com.example.audiolibros.fragments.SelectorFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MainPresenter.View{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdaptadorLibrosFiltro adaptador;
@@ -33,14 +33,14 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     //    LibroStorage libroStorage;
-    private MainController controller;
+    private MainPresenter presenter;
     LibrosSingleton librosSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        controller = new MainController(LibroSharedPreferenceStorage.getInstance(this));
+        presenter = new MainPresenter(LibroSharedPreferenceStorage.getInstance(this), this);
 //        controller = new MainController(new LibroSharedPreferenceStorage(this));
 //        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
         librosSingleton = LibrosSingleton.getInstance(this);
@@ -102,7 +102,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                irUltimoVisitado();
+//                irUltimoVisitado();
+                presenter.clickFavoriteButton();
             }
         });
         // Navigation Drawer
@@ -172,16 +173,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void irUltimoVisitado() {
-        if (controller.libroStorage.hasLastBook()) {
-            mostrarDetalle(controller.libroStorage.getLastBook());
-        } else {
-            Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
-        }
+//        if (controller.libroStorage.hasLastBook()) {
+//            mostrarDetalle(controller.libroStorage.getLastBook());
+//        } else {
+//            Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
+//        }
+        presenter.clickFavoriteButton();
     }
 
     public void mostrarDetalle(int id) {
-        mostrarFragmentDetalle(id);
-        controller.saveLastBook(id);
+//        mostrarFragmentDetalle(id);
+//        controller.saveLastBook(id);
+        presenter.openDetalle(id);
+    }
+
+    @Override
+    public void mostrarNoUltimaVisita() {
+        Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
