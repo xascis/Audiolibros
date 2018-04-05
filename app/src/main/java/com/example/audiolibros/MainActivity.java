@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    //    LibroStorage libroStorage;
+    LibroStorage libroStorage;
     private MainPresenter presenter;
     LibrosSingleton librosSingleton;
 
@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(LibroSharedPreferenceStorage.getInstance(this), this);
+        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
+        presenter = new MainPresenter(new SaveLastBook(libroStorage), new HasLastBook(libroStorage), new GetLastBook(libroStorage), this);
 //        controller = new MainController(new LibroSharedPreferenceStorage(this));
 //        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
         librosSingleton = LibrosSingleton.getInstance(this);
