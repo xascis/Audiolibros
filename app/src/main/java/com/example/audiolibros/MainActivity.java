@@ -3,7 +3,6 @@ package com.example.audiolibros;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -33,14 +32,17 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    LibroStorage libroStorage;
+    //    LibroStorage libroStorage;
+    private MainController controller;
     LibrosSingleton librosSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
+        controller = new MainController(LibroSharedPreferenceStorage.getInstance(this));
+//        controller = new MainController(new LibroSharedPreferenceStorage(this));
+//        libroStorage = LibroSharedPreferenceStorage.getInstance(this);
         librosSingleton = LibrosSingleton.getInstance(this);
 //        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
         adaptador = (AdaptadorLibrosFiltro) librosSingleton.getAdaptador();
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void mostrarDetalle(int id) {
+    public void mostrarFragmentDetalle(int id) {
         DetalleFragment detalleFragment = (DetalleFragment)
                 getFragmentManager().findFragmentById(R.id.detalle_fragment);
         if (detalleFragment != null) {
@@ -162,19 +164,24 @@ public class MainActivity extends AppCompatActivity
             transaccion.addToBackStack(null);
             transaccion.commit();
         }
-        SharedPreferences pref = getSharedPreferences(
-                "com.example.audiolibros_internal", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("ultimo", id);
-        editor.commit();
+//        SharedPreferences pref = getSharedPreferences(
+//                "com.example.audiolibros_internal", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putInt("ultimo", id);
+//        editor.commit();
     }
 
     public void irUltimoVisitado() {
-        if (libroStorage.hasLastBook()) {
-            mostrarDetalle(libroStorage.getLastBook());
+        if (controller.libroStorage.hasLastBook()) {
+            mostrarDetalle(controller.libroStorage.getLastBook());
         } else {
             Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void mostrarDetalle(int id) {
+        mostrarFragmentDetalle(id);
+        controller.saveLastBook(id);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
